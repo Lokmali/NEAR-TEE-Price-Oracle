@@ -208,4 +208,3 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 **Built for NEAR TEE Price Oracle Contest**
-
