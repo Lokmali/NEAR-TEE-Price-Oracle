@@ -1,0 +1,40 @@
+# Oracle Node Configuration Example
+# Copy this file to config.toml and fill in your values
+
+node_id = "oracle-node-1"
+region = "us-east-1"
+endpoint = "https://oracle-node-1.example.com"
+update_interval = 60  # seconds
+
+# Assets to track
+assets = ["BTC", "ETH", "NEAR", "BNB", "SOL", "ADA", "DOT", "MATIC", "AVAX", "XRP"]
+
+[near]
+network = "testnet"  # or "mainnet"
+rpc_url = "https://rpc.testnet.near.org"
+contract_id = "oracle.testnet"
+signer_id = "your-account.testnet"
+private_key = "ed25519:your_private_key_here"
+
+[tee]
+tee_type = "sgx"  # or "phala"
+enable_attestation = false  # Set to true in production
+attestation_url = "https://api.trustedservices.intel.com/sgx/dev/attestation/v4"
+
+[price_sources]
+# CoinGecko (no API key needed for basic tier)
+coingecko_api_key = ""  # Optional: Pro API key for higher rate limits
+
+# Major exchanges (no API keys needed for public price data)
+binance_enabled = true
+kraken_enabled = true
+coinbase_enabled = true
+huobi_enabled = true
+kucoin_enabled = true
+bitfinex_enabled = true
+gemini_enabled = true
+
+# Premium data providers (require API keys)
+coinmarketcap_api_key = ""  # Get from https://coinmarketcap.com/api/
+cryptocompare_api_key = ""  # Get from https://www.cryptocompare.com/cryptopian/api-keys
+

@@ -1,0 +1,29 @@
+[package]
+name = "oracle"
+version = "1.0.0"
+edition = "2021"
+authors = ["NEAR TEE Oracle Team"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = "5.1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = "0.4"
+base64 = "0.21"
+
+[dev-dependencies]
+near-sdk = { version = "5.1.0", features = ["unit-testing"] }
+near-workspaces = "0.10.0"
+tokio = { version = "1.35", features = ["full"] }
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+

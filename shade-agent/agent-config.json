@@ -1,0 +1,29 @@
+{
+  "agent": {
+    "name": "NEAR TEE Oracle Agent",
+    "version": "1.0.0",
+    "description": "AI agent for querying NEAR TEE Price Oracle",
+    "capabilities": [
+      "price_query",
+      "batch_price_query",
+      "node_status",
+      "market_analysis"
+    ]
+  },
+  "oracle": {
+    "network": "mainnet",
+    "contract_id": "oracle.near",
+    "rpc_url": "https://rpc.mainnet.near.org"
+  },
+  "endpoints": {
+    "price_query": "agent_query",
+    "batch_query": "agent_batch_query",
+    "supported_assets": "get_supported_assets",
+    "node_status": "get_active_nodes"
+  },
+  "rate_limits": {
+    "requests_per_minute": 60,
+    "burst_size": 10
+  }
+}
+

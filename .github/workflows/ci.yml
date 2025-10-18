@@ -1,0 +1,131 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Smart Contract Tests
+  contract-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Cache cargo index
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Cache cargo build
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Run contract tests
+        run: |
+          cd contracts/oracle
+          cargo test --verbose
+      
+      - name: Run clippy
+        run: |
+          cd contracts/oracle
+          cargo clippy -- -D warnings
+      
+      - name: Check formatting
+        run: |
+          cd contracts/oracle
+          cargo fmt -- --check
+  
+  # Oracle Node Tests
+  node-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      
+      - name: Run node tests
+        run: |
+          cd oracle-node
+          cargo test --verbose
+      
+      - name: Run clippy
+        run: |
+          cd oracle-node
+          cargo clippy -- -D warnings
+  
+  # Dashboard Tests
+  dashboard-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: dashboard/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('dashboard/package-lock.json') }}
+      
+      - name: Install dependencies
+        run: |
+          cd dashboard
+          npm ci
+      
+      - name: Run linter
+        run: |
+          cd dashboard
+          npm run lint
+      
+      - name: Build dashboard
+        run: |
+          cd dashboard
+          npm run build
+  
+  # Shade Agent Tests
+  shade-agent-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          cd shade-agent
+          npm ci
+      
+      - name: Build
+        run: |
+          cd shade-agent
+          npm run build
+
